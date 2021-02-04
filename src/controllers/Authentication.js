@@ -1,3 +1,5 @@
+const { v4: uuidv4 } = require('uuid');
+
 exports.register= ((req,res,next)=>{
     const name = req.body.name;
     const email = req.body.email;
@@ -6,10 +8,10 @@ exports.register= ((req,res,next)=>{
     const result = {
         message: 'Register Success',
         data:{
-            uid:1,
-            name:name,
-            email:email,
-            password:password
+            uid:uuidv4(),
+            name,
+            email,
+            password
         }
     }
     

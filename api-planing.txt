@@ -1,0 +1,46 @@
+Standar Api
+
+{root.api}/{version}/{grouping}/${endpoint}
+http://backend.com/v1/auth/login
+
+Standar Response 
+
+200 - OK                    -> Call API Success
+201 - CREATED               -> Post Success
+400 - BAD REQUEST           -> Error on Client Side (body request)
+401 - UNAUTHORIZED          -> Need Token
+403 - FORBIDDEN             -> Need Permission
+404 - NOT FOUND             -> End Point not found
+500 - INTERNAL SERVER ERROR -> Error on Server Side
+502 - BAD GATEWAY           -> Invalid Response From Antoher Req
+
+Authentication
+
+[1] - Registration
+{root.api}/{version}/auth/register
+
+req: {
+    "name":"name",
+    "email":"email",
+    "password":"password"
+}
+
+res:{
+    "message": "Regis Success",
+    "data":{
+        "id":1,
+        "name":"name"
+        "email":"password"
+    }
+}
+
+[2] - Login
+{root.api}/{version}/auth/login
+
+Blog
+
+[1] - Create Blog Content
+[2] - Get Blog Content
+[3] - Update Blog Content
+[4] - Delete Blog Content
+
