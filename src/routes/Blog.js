@@ -10,4 +10,14 @@ router.post('/post',
     body('body').isLength({min: 5}).withMessage('Input body tidak sesuai'),
 ], blogController.postContent)
 
+router.get('/posts', blogController.getAllContentBlog)
+
+router.get('/post/:postId', blogController.getContentById)
+
+router.put('/post/:postId',
+[
+    body('title').isLength({min: 5}).withMessage('Input title tidak sesuai'),
+    body('body').isLength({min: 5}).withMessage('Input body tidak sesuai'),
+], blogController.updateContent)
+
 module.exports = router;
