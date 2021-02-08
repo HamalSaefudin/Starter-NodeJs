@@ -20,4 +20,8 @@ router.put('/post/:postId',
     body('body').isLength({min: 5}).withMessage('Input body tidak sesuai'),
 ], blogController.updateContent)
 
+router.delete('/post/:postId', blogController.deleteContent);
+router.delete('/post/softDelete/:postId', blogController.softDeleteContent);
+
+
 module.exports = router;

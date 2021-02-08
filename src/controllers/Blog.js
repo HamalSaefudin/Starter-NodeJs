@@ -1,7 +1,8 @@
-const moment = require('moment')
 const {validationResult} = require('express-validator')
 const { v4: uuidv4 } = require('uuid');
 const ContentBlog = require('../models/Blog')
+const path = require('path')
+const fs = require('fs');
 
 exports.postContent=(req,res,next)=>{
     const errors = validationResult(req)
@@ -30,7 +31,8 @@ exports.postContent=(req,res,next)=>{
         author:{
             uid:uuidv4(),
             name
-        }
+        },
+        isDeleted:1
     })
 
     Posting.save()
@@ -45,7 +47,7 @@ exports.postContent=(req,res,next)=>{
 }
 
 exports.getAllContentBlog=(req,res,next)=>{
-    ContentBlog.find()
+    ContentBlog.find({isDeleted:1})
     .then((x)=>{
         res.status(200).json({
             message:'Data Berhasil Dipanggil',
@@ -110,4 +112,53 @@ exports.updateContent=(req,res,next)=>{
         })
     })
     .catch(err=>next(err));
+}
+
+const removeImage=({filePath})=>{
+    filePath = path.join(__dirname, '../..',filePath);
+    fs.unlink(filePath, err=>{console.log(err)} )
+}
+
+exports.deleteContent=(req,res,next)=>{
+    const postId = req.params.postId
+
+    ContentBlog.findById(postId)
+    .then(x=>{
+        if(!x){
+            const error = new Error('Content Not Found');
+            error.status = 404;
+            throw error;
+        }
+        removeImage({filePath:x.image});
+        return ContentBlog.findByIdAndRemove(postId);
+    })
+    .then(result=>{
+        res.status(200).json({
+            message:'Content successfully deleted',
+            data:result
+        })
+    })
+    .catch(e=>next(e))
+}
+
+exports.softDeleteContent=(req,res,next)=>{
+    const postId = req.params.postId;
+
+    ContentBlog.findById(postId)
+    .then(x=>{
+        if(!x){
+            const error = new Error('Content Not Found');
+            error.status = 404;
+            throw error;
+        }
+        x.isDeleted = 2;
+        return x.save();
+    })
+    .then(result => {
+        res.status(200).json({
+            message:'Soft Delete Successfull',
+            data: result
+        })
+    })
+    .catch(err=>next(err))
 }
