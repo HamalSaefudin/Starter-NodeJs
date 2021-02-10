@@ -5,7 +5,7 @@ const blogRoutes = require('./src/routes/Blog')
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer')
-const path = require('path')
+const path = require('path');
 
 const fileStorage = multer.diskStorage({
     destination:(req,file,cb)=>{
@@ -46,9 +46,10 @@ app.use((err,req,res,next)=>{
     const data = err.data;
     res.status(status).json({message, data})
 })
+const dbUrl = 'mongodb+srv://Hamal:Mern220402@cluster0.t8wvl.mongodb.net/MernBlog?retryWrites=true&w=majority'
 
 mongoose
-.connect('mongodb+srv://Hamal:Mern220402@cluster0.t8wvl.mongodb.net/MernBlog?retryWrites=true&w=majority')
+.connect(dbUrl)
 .then(()=>{
     app.listen(4000,()=>{console.log('connection success')})
 })
